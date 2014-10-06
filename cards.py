@@ -57,7 +57,7 @@ class CardActions(object):
       s.onMiss(self, t)
       return
 
-    logging.info(s.name + ' Hits ' + t.name + ' For ' + str(hit) + ' HP')
+    logging.info(s.name + ' Damages ' + t.name + ' For ' + str(hit) + ' HP')
     if t.currentHP + hit <= 0 :
       t.onDeath(source)
     else : 
@@ -69,7 +69,7 @@ class CardActions(object):
     self.status.alive = False
 
 
-    logging.info(self.name + ' Is Banished!')
+    logging.info(self.name + ' Is Dead!')
 
   def defend(self):
     pass
@@ -86,6 +86,12 @@ class CardActions(object):
   def onSplash(self):
     pass
 
+  def onBuff(self):
+    pass
+
+  def onDebuff(self):
+    pass
+
   def onMiss(self, t):
     logging.info(self.name + ' Misses ' + t.name + '!!')
 
@@ -96,7 +102,10 @@ class CardActions(object):
     logging.info(self.name)
 
 
-class Card(CardActions, object):
+class CardBaseValues(object):
+  pass
+
+class Card(CardBaseValues, CardActions, object):
 
   # default init method for all cards
   # do not overwrite!
@@ -180,7 +189,8 @@ class Card(CardActions, object):
     self._magicDefense = int(value)
 
   
-
+  def executeAction(self, action, target):
+    pass
 
   def attack(self, target):
     self.onAttack(target)
@@ -198,4 +208,4 @@ class Card(CardActions, object):
     return self.name
 
   def __repr__(self):
-    return 'Level: ' + self.level + ' Name: ' + self.name + ' HP: ' + str(self.hitPoints)
+    return 'Level: ' + self.level + ' Name: ' + self.name + ' HP: ' + str(self.currentHP) + '/' + str(self.hitPoints)
