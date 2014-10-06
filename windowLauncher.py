@@ -1,48 +1,49 @@
-import Tkinter
+try:
+    import wx
+except ImportError:
+    raise ImportError,"The wxPython module is required to run this program"
 
-class simpleapp_tk(Tkinter.Tk):
-    def __init__(self,parent):
-        Tkinter.Tk.__init__(self,parent)
+class simpleapp_wx(wx.Frame):
+    def __init__(self,parent,id,title):
+        wx.Frame.__init__(self,parent,id,title)
         self.parent = parent
         self.initialize()
 
     def initialize(self):
-        self.grid()
+        sizer = wx.GridBagSizer()
 
-        self.entryVariable = Tkinter.StringVar()
-        self.entry = Tkinter.Entry(self,textvariable=self.entryVariable)
-        self.entry.grid(column=0,row=0,sticky='EW')
-        self.entry.bind("<Return>", self.OnPressEnter)
-        self.entryVariable.set(u"Enter text here.")
+        self.entry = wx.TextCtrl(self,-1,value=u"Enter text here.")
+        sizer.Add(self.entry,(0,0),(1,1),wx.EXPAND)
+        self.Bind(wx.EVT_TEXT_ENTER, self.OnPressEnter, self.entry)
 
-        button = Tkinter.Button(self,text=u"Click me !",
-                                command=self.OnButtonClick)
-        button.grid(column=1,row=0)
+        button = wx.Button(self,-1,label="Click me !")
+        sizer.Add(button, (0,1))
+        self.Bind(wx.EVT_BUTTON, self.OnButtonClick, button)
 
-        self.labelVariable = Tkinter.StringVar()
-        label = Tkinter.Label(self,textvariable=self.labelVariable,
-                              anchor="w",fg="white",bg="blue")
-        label.grid(column=0,row=1,columnspan=2,sticky='EW')
-        self.labelVariable.set(u"Hello !")
 
-        self.grid_columnconfigure(0,weight=1)
-        self.resizable(True,False)
-        self.update()
-        self.geometry(self.geometry())       
-        self.entry.focus_set()
-        self.entry.selection_range(0, Tkinter.END)
+        self.label = wx.StaticText(self,-1,label=u'Hello !')
+        self.label.SetBackgroundColour(wx.BLUE)
+        self.label.SetForegroundColour(wx.WHITE)
+        sizer.Add( self.label, (1,0),(1,2), wx.EXPAND )
 
-    def OnButtonClick(self):
-        self.labelVariable.set( self.entryVariable.get()+" (You clicked the button)" )
-        self.entry.focus_set()
-        self.entry.selection_range(0, Tkinter.END)
+        sizer.AddGrowableCol(0)
+        self.SetSizerAndFit(sizer)
+        self.SetSizeHints(-1,self.GetSize().y,-1,self.GetSize().y );
+        self.entry.SetFocus()
+        self.entry.SetSelection(-1,-1)
+        self.Show(True)
+
+    def OnButtonClick(self,event):
+        self.label.SetLabel( self.entry.GetValue() + " (You clicked the button)" )
+        self.entry.SetFocus()
+        self.entry.SetSelection(-1,-1)
 
     def OnPressEnter(self,event):
-        self.labelVariable.set( self.entryVariable.get()+" (You pressed ENTER)" )
-        self.entry.focus_set()
-        self.entry.selection_range(0, Tkinter.END)
+        self.label.SetLabel( self.entry.GetValue() + " (You pressed ENTER)" )
+        self.entry.SetFocus()
+        self.entry.SetSelection(-1,-1)
 
 if __name__ == "__main__":
-    app = simpleapp_tk(None)
-    app.title('my application')
-    app.mainloop()
+    app = wx.App()
+    frame = simpleapp_wx(None,-1,'my application')
+    app.MainLoop()
