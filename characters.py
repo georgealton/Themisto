@@ -2,6 +2,7 @@ import logging
 
 import cards
 import stance
+import actions
 
 class Man(cards.Card, object):
   Stance = stance.Righteous()

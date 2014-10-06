@@ -8,7 +8,7 @@ class Battle(object):
     self.requestBattle()
 
   def requestBattle(self):
-    logging.info(self.players[0].title() + ' Wants to Battle ' + self.players[1].title())
+    logging.info('%s Wants to Battle %s', self.players[1].title(), self.players[0].title())
     self.start()
 
 
@@ -20,6 +20,8 @@ class Battle(object):
     
   def end(self):
     logging.info("Battled Ended")
+
+
 
 class Turns(object):
   def __init__(self, players):
