@@ -28,8 +28,13 @@ class Deck(object):
   def __str__(self):
     return 'Deck: ' + str(self.Cards)
 
-
-
+class Status(object):
+  def __init__(self):
+    self.Alive = True
+    self.Sleep = False
+    self.Poison = False
+    self.Blind = False
+    self.Frozen = False
 
 class CardActions(object):
 
@@ -51,7 +56,7 @@ class CardActions(object):
 
   def onDeath(self, source):
     self.HitPoints = 0
-    self.Alive = False
+    self.status.Alive = False
     logging.info(self.Name + ' Is Banished!')
 
 
@@ -61,20 +66,18 @@ class CardActions(object):
 
 class Card(CardActions, object):
 
-  HitPoints = 0
-  MagicPoints = 0
-  Attack = 0
-  Defence = 0
-  Name = "DefaultCharacter"
-  Stance = "Neutral"
-  Level = "1"
+  def __init__(self):
+    self.HitPoints = 0
+    self.MagicPoints = 0
+    self.Attack = 0
+    self.Defence = 0
+    self.Name = "DefaultCharacter"
+    self.Stance = "Neutral"
+    self.Level = "1"
 
-  Alive = True
+    #When a Card is created set the value of it's Statuses 
+    self.status = Status()
 
-  Sleep = False
-  Poison = False
-  Blind = False
-  Frozen = False
 
   def speak(self):
     logging.info(self.Name)
