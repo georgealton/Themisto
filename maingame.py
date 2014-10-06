@@ -1,0 +1,2 @@
+class MainGame(object):
+  pass
