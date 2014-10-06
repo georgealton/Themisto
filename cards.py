@@ -54,7 +54,7 @@ class CardActions(object):
     hit = -random.randint(0,9)
 
     if(hit == 0 ):
-      logging.info(s.name + ' Misses ' + t.name + '!!')
+      s.onMiss(self, t)
       return
 
     logging.info(s.name + ' Hits ' + t.name + ' For ' + str(hit) + ' HP')
@@ -72,10 +72,25 @@ class CardActions(object):
     logging.info(self.name + ' Is Banished!')
 
   def defend(self):
-    raise NotImplementedError()
+    pass
 
   def onDefend(self):
-    raise NotImplementedError()
+    pass
+
+  def onAbsorb(self):
+    pass
+
+  def onReflect(self):
+    pass
+
+  def onSplash(self):
+    pass
+
+  def onMiss(self, t):
+    logging.info(self.name + ' Misses ' + t.name + '!!')
+
+  def onElemental(self, t):
+    pass
 
   def speak(self):
     logging.info(self.name)
