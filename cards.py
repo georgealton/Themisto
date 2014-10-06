@@ -78,7 +78,6 @@ class Card(CardActions, object):
     #When a Card is created set the value of it's Statuses 
     self.status = Status()
 
-
   def speak(self):
     logging.info(self.Name)
 
@@ -86,7 +85,7 @@ class Card(CardActions, object):
     self.onAttack(target)
 
   def isDead(self):
-    return self.Alive
+    return self.status.Alive
 
   def __str__(self):
     return self.Name
