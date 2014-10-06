@@ -21,7 +21,7 @@ class Deck(object):
     target_player.getDeck().refreshDeck()
 
   def refreshDeck(self):
-    self.Cards[:] = [c for c in self.Cards if c.Alive]
+    self.Cards[:] = [c for c in self.Cards if c.alive]
 
   def __len__(self):
     return len(self.Cards)
@@ -30,35 +30,49 @@ class Deck(object):
 
 class Status(object):
   def __init__(self):
-    self.Alive = True
+    self.alive = True
     self.Sleep = False
     self.Poison = False
     self.Blind = False
     self.Frozen = False
-
+  
+  @property
+  def alive(self):
+    return self._alive
+  @alive.setter
+  def alive(self, value):
+    if self.alive not value : 
+      self._alive = value
+  
+# a mixin for cards to handle events 
 class CardActions(object):
 
-  def onAttack(self, target):
-    target.onAttacked(self, target)
+  def onAttack(self, t):
+    t.onAttacked(self, target)
 
-  def onAttacked(self, source, target):
+  def onAttacked(self, s, t):
     hit = -random.randint(0,9)
 
     if(hit == 0 ):
-      logging.info(source.Name + ' Misses ' + target.Name + '!!')
+      logging.info(s.name + ' Misses ' + t.name + '!!')
       return
 
-    logging.info(source.Name + ' Hits ' + target.Name + ' For ' + str(hit) + ' HP')
-    if target.HitPoints + hit <= 0 :
-      target.onDeath(source)
+    logging.info(s.name + ' Hits ' + t.name + ' For ' + str(hit) + ' HP')
+    if t.currentHP + hit <= 0 :
+      t.onDeath(source)
     else : 
-      target.HitPoints += hit
+      t.currentHP += hit
 
   def onDeath(self, source):
-    self.HitPoints = 0
-    self.status.Alive = False
-    logging.info(self.Name + ' Is Banished!')
+    # set the HP to 0 so that it doesn't go negative, and the alive status to false
+    self.currentHP = 0
+    self.status.alive = False
 
+
+    logging.info(self.name + ' Is Banished!')
+
+  def defend(self):
+    raise NotImplementedError()
 
   def onDefend(self):
     raise NotImplementedError()
@@ -69,22 +83,29 @@ class CardActions(object):
 
 class Card(CardActions, object):
 
-  def __init__(self, hp=1, mp=1, map=1, mdp=1, mgap=1, mgdp=1, name='default_card', level=1):
+  # default init method for all cards
+  # do not overwrite!
+  def __init__(self, hp=1, mp=1, ap=1, dp=1, maap=1, madp=1, name='default_card', level=1):
     self.hitPoints = hp
-    self.currentHP = self.hitPoints
     self.magicPoints = mp
+
+    # on init set the cards current hp/mp to be full
+    self.currentHP = self.hitPoints
     self.currentMP = self.magicPoints
+    
     self.meleeAttack = ap
     self.meleeDefence = dp
-    self.magicAttack = mgap
-    self.magicDefence = mgdp
+    self.magicAttack = maap
+    self.magicDefence = madp
     self.name = name
     self.level = level
 
     self.Stance = "Neutral"
     
-    #When a Card is created set the value of it's Statuses 
+    #When a Card is created set the value of it's Statuses to be clear
     self.status = Status()
+
+    # define the actions that a card can do
     self.actions = ()
 
   @property
@@ -150,7 +171,7 @@ class Card(CardActions, object):
     self.onAttack(target)
 
   def isDead(self):
-    return not self.status.Alive
+    return not self.status.alive
 
   def getActions(self):
     pass
