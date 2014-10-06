@@ -33,7 +33,3 @@ class defend(action, object):
 
 class skip(action, object):
   pass
-
-class meleeAttack(attack):
-  pass
-
