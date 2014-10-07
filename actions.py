@@ -37,12 +37,14 @@ class action(object):
 
 
 class attack(action):
+    
+  def __init__(self):
+    self.successChance = 0.98
+    self.attackModifier = 1
 
-  def calcDamage(self, cardStrength, targetResist):
-    self.modifier = 1
-    self.weaponQuality = 1
-    self.randomMod = random.uniform(0,0.4)
-    rawDamage = self.modifier * self.weaponQuality * cardStrength * self.randomMod
+  def calcDamage(self, cardStrength, targetResist, cardWeaponQuality):
+    randomMod = random.uniform(0,0.4)
+    rawDamage = self.modifier * self.weaponQuality * cardStrength * cardWeaponQuality * randomMod
     resistedDamage = rawDamage * targetResist
     return resistedDamage
 
@@ -78,9 +80,10 @@ class wall(defend):
   def __init__(self):
     self.actiontype = magic()
 
-class fineSword(attack):
-    def __init__(self):
-      self.weaponQuality = 1.3
-
 class criticalShot(attack):
-  pass
+  #More damage, less likely to succeed
+  def __init__(self):
+    attack.__init__(self)
+    self.successChance = 0.5
+    self.attackModifier = 2
+    
