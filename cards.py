@@ -21,7 +21,7 @@ class Deck(object):
     target_player.getDeck().refreshDeck()
 
   def refreshDeck(self):
-    self.Cards[:] = [c for c in self.Cards if c.Status.alive]
+    self.Cards[:] = [c for c in self.Cards if c.status.alive]
 
   def __len__(self):
     return len(self.Cards)
