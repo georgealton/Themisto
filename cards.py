@@ -30,7 +30,7 @@ class Deck(object):
 
 class Status(object):
   def __init__(self):
-    self.alive = True
+    self._alive = True
     self.Sleep = False
     self.Poison = False
     self.Blind = False
@@ -109,24 +109,24 @@ class Card(CardBaseValues, CardActions, object):
 
   # default init method for all cards
   # do not overwrite!
-  def __init__(self, hp=1, mp=1, ap=1, dp=1, maap=1, madp=1, name='default_card', level=1):
-    self.hitPoints = hp
-    self.magicPoints = mp
+  def __init__(self, hp=1, mp=1, ap=1, dp=1, maap=1, madp=1, n='default_card', l=1):
+    self._hitPoints = hp
+    self._magicPoints = mp
 
     # on init set the cards current hp/mp to be full
-    self.currentHP = self.hitPoints
-    self.currentMP = self.magicPoints
+    self._currentHP = self.hitPoints
+    self._currentMP = self.magicPoints
     
-    self.meleeAttack = ap
-    self.meleeDefence = dp
+    self._meleeAttack = ap
+    self._meleeDefence = dp
     
-    self.magicAttack = maap
-    self.magicDefence = madp
+    self._magicAttack = maap
+    self._magicDefence = madp
 
 
 
-    self.name = name
-    self.level = level
+    self._name = n
+    self._level = l
 
     self.Stance = "Neutral"
     
@@ -166,10 +166,10 @@ class Card(CardBaseValues, CardActions, object):
   
   @property
   def level(self):
-    return self.level
+    return self._level
   @level.setter
-  def level(self, level):
-    self._level = int(level)
+  def level(self, value):
+    self._level = int(value)
 
   @property
   def name(self):
@@ -192,6 +192,21 @@ class Card(CardBaseValues, CardActions, object):
   def magicDefense(self, value):
     self._magicDefense = int(value)
 
+  @property
+  def currentHP(self):
+    return self._currentHP
+  @currentHP.setter
+  def currentHP(self, value):
+    self._currentHP = value
+
+  @property
+  def currentMP(self):
+      return self._currentMP
+  @currentMP.setter
+  def currentMP(self, value):
+      self._currentMP = value
+  
+
   
   def executeAction(self, action, target):
     pass
@@ -212,4 +227,4 @@ class Card(CardBaseValues, CardActions, object):
     return self.name
 
   def __repr__(self):
-    return 'Level: ' + self.level + ' Name: ' + self.name + ' HP: ' + str(self.currentHP) + '/' + str(self.hitPoints)
+    return 'Level: ' + str(self.level) + ' Name: ' + self.name + ' HP: ' + str(self.currentHP) + '/' + str(self.hitPoints)
