@@ -1,21 +1,26 @@
+import random
+
+#Action Types
 class actionType(object):
   def __init__(self):
     self.name = self.__class__.__name__
+    
+
 
 class melee(actionType):
-  pass
+    pass
 
 class magic(actionType):
-  pass
+    pass
 
 class projectile(actionType):
-  pass
-
+    pass
+  
 class splash(actionType):
-  pass
+    pass
 
 
-
+#Action Super Classes
 class action(object):
   def __init__(self):
     self.actiontype = ''
@@ -23,12 +28,27 @@ class action(object):
   def run(self):
     pass
 
+  def __sucessChance__(self):
+      if random.random() < self.sucessChance:
+          return True
+      else:
+          return False
+
 
 class attack(action):
-  pass
-
+  
+  def calcDamage(self, cardStrength, targetResist):
+      self.modifier = 1
+      self.weaponQuality = 1
+      self.randomMod = random.uniform(0,0.4)
+      rawDamage = self.modifier * self.weaponQuality * cardStrength * self.randomMod
+      resistedDamage = rawDamage * targetResist
+      return resistedDamage
+      
+  
 class defend(action):
   pass
+  self.sucessChance = 0.98
 
 class item(action):
   pass
@@ -40,11 +60,11 @@ class cast(action):
   pass
 
 
-
+#Actions
 class block(defend):
   def __init__(self):
     self.actiontype = melee()
-
+    
 class shield(defend):
   def __init__(self):
     self.actiontype = melee()
@@ -56,3 +76,9 @@ class barrier(defend):
 class wall(defend):
   def __init__(self):
     self.actiontype = magic()
+    
+class fineSword(attack):
+    self.weaponQuality = 1.3
+    
+class criticalShot(attack):
+    
