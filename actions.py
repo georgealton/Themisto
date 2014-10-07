@@ -1,4 +1,5 @@
 import random
+import elements
 
 #Action Types
 class actionType(object):
@@ -42,16 +43,32 @@ class attack(action):
     self.successChance = 0.98
     self.attackModifier = 1
 
-  def calcDamage(self, cardStrength, targetResist, cardWeaponQuality):
+  def calculateDamage(self, cardPower, targetResWeak, targetWeakness, equipmentQuality):
+    #cardPower         : Physical/Magical power
+    #targetResWeak     : targetCard resist/weak, dictionary, e.g. "Fire" : 1 (neutral) 2 (double damage)
+    #                  0 (immune) -1 (absorbs)
+    #Equipment         : Weapon or magic boosting gear
+    
     randomMod = random.uniform(0,0.4)
-    rawDamage = self.modifier * self.weaponQuality * cardStrength * cardWeaponQuality * randomMod
-    resistedDamage = rawDamage * targetResist
-    return resistedDamage
+    rawDamage = self.attackModifier * cardPower * equipmentQuality * randomMod
+    
+    if self.elementType.getType() in targetResWeak:
+        adjustedDamage = rawDamage * targetResWeak[self.elementType.getType()]
+        return adjustedDamage
+    
+    
+    
 
 
 class defend(action):
-  # removed self for now!
-  successChance = 0.98
+  def __init__(self):
+    self.successChance = 0.98
+    
+  def calculateDefenceBoost(self, currentDefence):
+    randomMod = random.uniform(0,0.2)
+    boost = randomMod + currentDefence + 0.15
+    return boost
+      
 
 class item(action):
   pass
@@ -84,6 +101,15 @@ class criticalShot(attack):
   #More damage, less likely to succeed
   def __init__(self):
     attack.__init__(self)
+    self.actiontype = melee()
     self.successChance = 0.5
     self.attackModifier = 2
+    
+class dragonBreathFire(attack):
+  def __init__(self):
+    self.actiontype = magic()
+    self.elementType = fire()
+    
+#Test section
+a = dragonBreathFire()
     
