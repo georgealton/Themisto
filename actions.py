@@ -43,11 +43,10 @@ class attack(action):
     self.successChance = 0.98
     self.attackModifier = 1
 
-  def calculateDamage(self, cardPower, targetResWeak, targetWeakness, equipmentQuality):
+  def calculateDamage(self, cardPower, targetResWeak, equipmentQuality):
     #cardPower         : Physical/Magical power
-    #targetResWeak     : targetCard resist/weak, dictionary, e.g. "Fire" : 1 (neutral) 2 (double damage)
-    #                  0 (immune) -1 (absorbs)
-    #Equipment         : Weapon or magic boosting gear
+    #targetResWeak     : targetCard resist/weak, dictionary, e.g. "Fire" : 1 (neutral) 2 (double damage), 0 (immune) -1 (absorbs)
+    #equipmentQuality  : Weapon or magic boosting gear
     
     randomMod = random.uniform(0,0.4)
     rawDamage = self.attackModifier * cardPower * equipmentQuality * randomMod
@@ -55,6 +54,8 @@ class attack(action):
     if self.elementType.getType() in targetResWeak:
         adjustedDamage = rawDamage * targetResWeak[self.elementType.getType()]
         return adjustedDamage
+    else:
+        return rawDamage
     
     
     
