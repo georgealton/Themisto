@@ -48,7 +48,7 @@ class Status(object):
 class CardActions(object):
 
   def onAttack(self, t):
-    t.onAttacked(self, target)
+    t.onAttacked(self, t)
 
   def onAttacked(self, s, t):
     hit = -random.randint(0,9)
