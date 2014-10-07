@@ -59,7 +59,7 @@ class CardActions(object):
 
     logging.info(s.name + ' Damages ' + t.name + ' For ' + str(hit) + ' HP')
     if t.currentHP + hit <= 0 :
-      t.onDeath(source)
+      t.onDeath(s)
     else : 
       t.currentHP += hit
 
