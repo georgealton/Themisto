@@ -2,16 +2,16 @@ class actionType(object):
   def __init__(self):
     self.name = self.__class__.__name__
 
-class melee(actionType, object):
+class melee(actionType):
   pass
 
-class magic(actionType, object):
+class magic(actionType):
   pass
 
-class projectile(actionType, object):
+class projectile(actionType):
   pass
 
-class splash(actionType, object):
+class splash(actionType):
   pass
 
 
@@ -24,16 +24,19 @@ class action(object):
     pass
 
 
-class attack(action, object):
+class attack(action):
   pass
 
-class defend(action, object):
+class defend(action):
   pass
 
-class item(action, object):
+class item(action):
   pass
 
-class skip(action, object):
+class skip(action):
+  pass
+
+class cast(action):
   pass
 
 

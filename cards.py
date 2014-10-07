@@ -41,7 +41,7 @@ class Status(object):
     return self._alive
   @alive.setter
   def alive(self, value):
-    if self.alive not value : 
+    if self.alive != value : 
       self._alive = value
   
 # a mixin for cards to handle events 
@@ -119,8 +119,12 @@ class Card(CardBaseValues, CardActions, object):
     
     self.meleeAttack = ap
     self.meleeDefence = dp
+    
     self.magicAttack = maap
     self.magicDefence = madp
+
+
+
     self.name = name
     self.level = level
 
@@ -165,7 +169,7 @@ class Card(CardBaseValues, CardActions, object):
     return self.level
   @level.setter
   def level(self, level):
-    self._level = int(i)
+    self._level = int(level)
 
   @property
   def name(self):

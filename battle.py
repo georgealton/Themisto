@@ -3,9 +3,10 @@ import logging
 class Battle(object):
   def __init__(self, sourcePlayer, targetPlayer):
     self.players = [sourcePlayer, targetPlayer]
-    self.turns = Turns(self.players)
 
     self.requestBattle()
+    
+    self.turns = Turns(self.players)
 
   def requestBattle(self):
     logging.info('%s Wants to Battle %s', self.players[1].title(), self.players[0].title())
