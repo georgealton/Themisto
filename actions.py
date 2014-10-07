@@ -28,8 +28,8 @@ class action(object):
   def run(self):
     pass
 
-  def __sucessChance__(self):
-      if random.random() < self.sucessChance:
+  def __successChance__(self):
+      if random.random() < self.successChance:
           return True
       else:
           return False
@@ -48,7 +48,7 @@ class attack(action):
   
 class defend(action):
   pass
-  self.sucessChance = 0.98
+  self.successChance = 0.98
 
 class item(action):
   pass
