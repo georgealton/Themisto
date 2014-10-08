@@ -109,7 +109,7 @@ class criticalShot(attack):
 class dragonBreathFire(attack):
   def __init__(self):
     self.actiontype = magic()
-    self.elementType = fire()
+    self.elementType = elements.fire()
     
 #Test section
 a = dragonBreathFire()

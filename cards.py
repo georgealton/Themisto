@@ -92,7 +92,7 @@ class CardActions(object):
   def onDebuff(self):
     pass
 
-  def onMiss(self, t):
+  def onMiss(self, s, t):
     logging.info(self.name + ' Misses ' + t.name + '!!')
 
   def onElemental(self, t):
