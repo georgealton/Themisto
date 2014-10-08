@@ -7,7 +7,7 @@ import maingame
 import player
 import characters
 import roles
-    
+
 class simpleapp_wx(wx.Frame):
     def __init__(self,parent,id,title):
         wx.Frame.__init__(self,parent,id,title)
@@ -37,23 +37,35 @@ class simpleapp_wx(wx.Frame):
         self.entry.SetFocus()
         self.entry.SetSelection(-1,-1)
         self.Show(True)
+        self.battle = None
 
     def OnButtonClick(self,event):
-        self.label.SetLabel("Starting game")
         self.entry.SetFocus()
         self.entry.SetSelection(-1,-1)
-        
-        p1Name = str(self.entry.GetValue())
-        p2Name = "Demon"
 
-        p1 = player.Player(p1Name, roles.GrandWizard)
-        p2 = player.Player(p2Name, roles.DarkLord)
+        if self.battle == None :
+            self.label.SetLabel("Starting game")
 
-        p1.addCardToDeck(characters.Paladin())
-        p2.addCardToDeck(characters.Goblin())
+            p1Name = str(self.entry.GetValue())
+            p2Name = "Demon"
 
-        battle = p1.startBattle(p2)
-        
+            self.p1 = player.Player(p1Name, roles.GrandWizard)
+            self.p2 = player.Player(p2Name, roles.DarkLord)
+
+            self.p1.addCardToDeck(characters.Paladin())
+            self.p2.addCardToDeck(characters.Goblin())
+
+            self.battle = self.p1.startBattle(self.p2)
+        else :
+            print("sdfsdf")
+
+            if self.p1.holdsCards() and self.p2.holdsCards():
+                self.battle.turns.runTurns()
+            else :
+                self.label.SetLabel("Game Over")
+
+
+
     def OnPressEnter(self,event):
         self.label.SetLabel( self.entry.GetValue() + " (You pressed ENTER)" )
         self.entry.SetFocus()

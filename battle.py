@@ -1,16 +1,19 @@
 import logging 
 
+
+
 class Battle(object):
   def __init__(self, sourcePlayer, targetPlayer):
     self.players = [sourcePlayer, targetPlayer]
-
+    self.battleStatus = "IDLE"
     self.turns = Turns(self.players)
     self.requestBattle()
     
 
   def requestBattle(self):
+    self.battleStatus = "REQUEST"
     logging.info('%s Wants to Battle %s', self.players[1].title(), self.players[0].title())
-    self.start()
+    #self.start()
 
 
   def start(self):
