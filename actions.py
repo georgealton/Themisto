@@ -1,4 +1,5 @@
 import random
+import elements
 
 #Action Types
 class actionType(object):
@@ -37,19 +38,38 @@ class action(object):
 
 
 class attack(action):
+    
+  def __init__(self):
+    self.successChance = 0.98
+    self.attackModifier = 1
 
-  def calcDamage(self, cardStrength, targetResist):
-    self.modifier = 1
-    self.weaponQuality = 1
-    self.randomMod = random.uniform(0,0.4)
-    rawDamage = self.modifier * self.weaponQuality * cardStrength * self.randomMod
-    resistedDamage = rawDamage * targetResist
-    return resistedDamage
+  def calculateDamage(self, cardPower, targetResWeak, equipmentQuality):
+    #cardPower         : Physical/Magical power
+    #targetResWeak     : targetCard resist/weak, dictionary, e.g. "Fire" : 1 (neutral) 2 (double damage), 0 (immune) -1 (absorbs)
+    #equipmentQuality  : Weapon or magic boosting gear
+    
+    randomMod = random.uniform(0,0.4)
+    rawDamage = self.attackModifier * cardPower * equipmentQuality * randomMod
+    
+    if self.elementType.getType() in targetResWeak:
+        adjustedDamage = rawDamage * targetResWeak[self.elementType.getType()]
+        return adjustedDamage
+    else:
+        return rawDamage
+    
+    
+    
 
 
 class defend(action):
-  # removed self for now!
-  successChance = 0.98
+  def __init__(self):
+    self.successChance = 0.98
+    
+  def calculateDefenceBoost(self, currentDefence):
+    randomMod = random.uniform(0,0.2)
+    boost = randomMod + currentDefence + 0.15
+    return boost
+      
 
 class item(action):
   pass
@@ -78,9 +98,19 @@ class wall(defend):
   def __init__(self):
     self.actiontype = magic()
 
-class fineSword(attack):
-    def __init__(self):
-      self.weaponQuality = 1.3
-
 class criticalShot(attack):
-  pass
+  #More damage, less likely to succeed
+  def __init__(self):
+    attack.__init__(self)
+    self.actiontype = melee()
+    self.successChance = 0.5
+    self.attackModifier = 2
+    
+class dragonBreathFire(attack):
+  def __init__(self):
+    self.actiontype = magic()
+    self.elementType = fire()
+    
+#Test section
+a = dragonBreathFire()
+    
