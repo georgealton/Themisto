@@ -201,20 +201,16 @@ class MyDialog(wx.Dialog):
     def __init__(self):
         """Constructor"""
         wx.Dialog.__init__(self, None, title="Player Name")
-
-        sizer = wx.BoxSizer(wx.VERTICAL)
+        
+        sizer = wx.BoxSizer(wx.HORIZONTAL)
+        
         self.entry = wx.TextCtrl(self,-1,value=u"Enter name here.")
         sizer.Add(self.entry, 0, wx.ALL|wx.CENTER, 5)
-        #self.Bind(wx.EVT_TEXT_ENTER, self.OnPressEnter, self.entry)
-
-        #self.comboBox1 = wx.ComboBox(self, 
-                                     # choices=['test1', 'test2'],
-                                     # value="")
         okBtn = wx.Button(self, wx.ID_OK)
 
-       # sizer.Add(self.comboBox1, 0, wx.ALL|wx.CENTER, 5)
-        sizer.Add(okBtn, 0, wx.ALL|wx.CENTER, 5)
+        sizer.Add(okBtn, 0, 0, 0)
         self.SetSizer(sizer)
+        sizer.Fit(self)
 
 class simpleapp_wx(wx.Frame):
     def __init__(self,parent,id,title):
@@ -222,30 +218,26 @@ class simpleapp_wx(wx.Frame):
         self.parent = parent
         self.initialize()
 
-
-
     def initialize(self):
         sizer = wx.GridBagSizer()
 
-        button = wx.Button(self,-1,label="Click me !")
-        sizer.Add(button, (0,1))
+        button = wx.Button(self,-1,label="Next turn")
+        sizer.Add(button, (0,0))
         self.Bind(wx.EVT_BUTTON, self.OnButtonClick, button)
 
         self.canvas = CubeCanvas(self)
         self.canvas.SetMinSize((200, 200))
-        sizer.Add(self.canvas, (0,2))
-        
+        sizer.Add(self.canvas, (1,0))
+       
         self.label = wx.StaticText(self,-1,label=u'Hello !')
         self.label.SetBackgroundColour(wx.BLUE)
         self.label.SetForegroundColour(wx.WHITE)
-        sizer.Add( self.label, (1,0),(1,2), wx.EXPAND )
-
+        sizer.Add(self.label,(2,0))
+        
         sizer.AddGrowableCol(0)
         self.SetSizerAndFit(sizer)
-        #self.SetSizeHints(-1,self.GetSize().y,-1,self.GetSize().y );
         self.Show(True)
         self.battle = None
-
 
         myDlg = MyDialog()
         res = myDlg.ShowModal()
@@ -254,7 +246,7 @@ class simpleapp_wx(wx.Frame):
 
         myDlg.Destroy()
         
-        self.label.SetLabel("Starting game")
+        self.label.SetLabel(self.p1Name+", click the button to start the game")
         p2Name = "Demon"
 
         self.p1 = player.Player(self.p1Name, roles.GrandWizard)
@@ -264,7 +256,6 @@ class simpleapp_wx(wx.Frame):
         self.p2.addCardToDeck(characters.Goblin())
 
         self.battle = self.p1.startBattle(self.p2)
-
 
 
     def OnButtonClick(self,event):
@@ -283,7 +274,5 @@ class simpleapp_wx(wx.Frame):
 
 if __name__ == "__main__":
     app = wx.App()
-    frame = simpleapp_wx(None,-1,'my application')
+    frame = simpleapp_wx(None,-1,'Themisto')
     app.MainLoop()
-
-
