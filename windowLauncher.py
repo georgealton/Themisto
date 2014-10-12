@@ -34,6 +34,7 @@ class MyCanvasBase(glcanvas.GLCanvas):
         glcanvas.GLCanvas.__init__(self, parent, -1)
         self.init = False
         self.context = glcanvas.GLContext(self)
+        #self.character = wx.Image('resources/images/character.bmp', wx.BITMAP_TYPE_BMP).ConvertToBitmap()
         
         # initial mouse position
         self.lastx = self.x = 30
@@ -63,9 +64,9 @@ class MyCanvasBase(glcanvas.GLCanvas):
         self.SetCurrent(self.context)
         if not self.init:
             self.InitGL()
-            self.init = True
+            self.init = True        
         self.OnDraw()
-
+    
     def OnMouseDown(self, evt):
         self.CaptureMouse()
         self.x, self.y = self.lastx, self.lasty = evt.GetPosition()
@@ -87,7 +88,7 @@ class CubeCanvas(MyCanvasBase):
 
         # position viewer
         glMatrixMode(GL_MODELVIEW)
-        glTranslatef(0.0, 0.0, -2.0)
+        glTranslatef(0.0, -0.0, -2.0)
 
         # position object
         glRotatef(self.y, 1.0, 0.0, 0.0)
@@ -208,7 +209,7 @@ class MyDialog(wx.Dialog):
         
         sizer = wx.BoxSizer(wx.HORIZONTAL)
         
-        self.entry = wx.TextCtrl(self,-1,value=u"Enter name here.")
+        self.entry = wx.TextCtrl(self,-1,value=u"Enter name here")
         sizer.Add(self.entry, 0, wx.ALL|wx.CENTER, 5)
         okBtn = wx.Button(self, wx.ID_OK)
 
@@ -236,7 +237,7 @@ class simpleapp_wx(wx.Frame):
         #Add canvas
         self.canvas = CubeCanvas(self)
         self.canvas.SetMinSize((500, 500))
-        sizer.Add(self.canvas, 1, wx.EXPAND | wx.ALL, 20)
+        sizer.Add(self.canvas, 1, wx.EXPAND | wx.ALL, 0)
 
         #Add next turn button
         nextTurnButton = wx.Button(self,-1,label="Next turn")
@@ -257,17 +258,19 @@ class simpleapp_wx(wx.Frame):
         sizer.SetSizeHints(self)
         self.SetSizer(sizer)
         self.Show(True)
-        self.battle = None
-        self.startNewGame(self)
-
-    def startNewGame(self,event):
+        
         myDlg = MyDialog()
         res = myDlg.ShowModal()
         if res == wx.ID_OK:
             self.p1Name = str(myDlg.entry.GetValue())
         myDlg.Destroy()
         #self.p1Name = "Test"
-        
+
+        self.battle = None
+        self.startNewGame(self)
+
+    def startNewGame(self,event):
+                
         self.label.SetLabel(self.p1Name+", next turn to start the game")
         self.p2Name = "Demon"
 
