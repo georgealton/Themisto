@@ -1,7 +1,5 @@
 try:
     import sys
- 
-    sys.path.append('C:\Python27\Lib\site-packages\wx-3.0-msw\wx')
     print sys.path
     import wxversion
     wxversion.select("3.0")
@@ -241,13 +239,18 @@ class simpleapp_wx(wx.Frame):
         sizer.Add(self.canvas, 1, wx.EXPAND | wx.ALL, 20)
 
         #Add next turn button
-        button = wx.Button(self,-1,label="Next turn")
-        sizer.Add(button, 0, 0, 0)
-        self.Bind(wx.EVT_BUTTON, self.OnButtonClick, button)
+        nextTurnButton = wx.Button(self,-1,label="Next turn")
+        sizer.Add(nextTurnButton, 0, 0, 0)
+        self.Bind(wx.EVT_BUTTON, self.OnButtonClick, nextTurnButton)
+
+        #Add new game button
+        newGameButton = wx.Button(self,-1,label="New Game")
+        sizer.Add(newGameButton, 0, 0, 1)
+        self.Bind(wx.EVT_BUTTON, self.startNewGame, newGameButton)
 
         #Add quit button
         quitButton = wx.Button(self,-1,label="Quit")
-        sizer.Add(quitButton, 0, 0, 1)
+        sizer.Add(quitButton, 0, 0, 2)
         self.Bind(wx.EVT_BUTTON, self.OnQuitButtonClick, quitButton)
 
         #Bind sizer
@@ -255,35 +258,40 @@ class simpleapp_wx(wx.Frame):
         self.SetSizer(sizer)
         self.Show(True)
         self.battle = None
+        self.startNewGame(self)
 
-       # myDlg = MyDialog()
-       # res = myDlg.ShowModal()
-       # if res == wx.ID_OK:
-       #     self.p1Name = str(myDlg.entry.GetValue())
-       # myDlg.Destroy()
-        self.p1Name = "Test"
+    def startNewGame(self,event):
+        myDlg = MyDialog()
+        res = myDlg.ShowModal()
+        if res == wx.ID_OK:
+            self.p1Name = str(myDlg.entry.GetValue())
+        myDlg.Destroy()
+        #self.p1Name = "Test"
         
-        self.label.SetLabel(self.p1Name+", click the button to start the game")
-        p2Name = "Demon"
+        self.label.SetLabel(self.p1Name+", next turn to start the game")
+        self.p2Name = "Demon"
 
         self.p1 = player.Player(self.p1Name, roles.GrandWizard)
-        self.p2 = player.Player(p2Name, roles.DarkLord)
+        self.p2 = player.Player(self.p2Name, roles.DarkLord)
 
         self.p1.addCardToDeck(characters.Paladin())
         self.p2.addCardToDeck(characters.Goblin())
 
         self.battle = self.p1.startBattle(self.p2)
+        
 
     def OnButtonClick(self,event):
-        print('clicked!')
+        print('Next turn clicked!')       
+        
         if self.p1.holdsCards() and self.p2.holdsCards():
             self.battle.turns.runTurns()
         else :
-            self.label.SetLabel("Game Over")
+            self.label.SetLabel("Game Over, click to try again")
 
     def OnQuitButtonClick(self,event):
         print('Quitting...')
         raise SystemExit
+             
 
     def OnPressEnter(self,event):
         self.label.SetLabel( self.entry.GetValue() + " (You pressed ENTER)" )
