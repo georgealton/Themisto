@@ -17,7 +17,7 @@ class Battle(object):
 
 
   def start(self):
-    while(self.players[0].holdsCards() and self.players[1].holdsCards()):
+    if(self.players[0].holdsCards() and self.players[1].holdsCards()):
       self.turns.runTurns()
 
     self.end()
