@@ -1,10 +1,16 @@
 try:
-    import wx
     import sys
+ 
+    sys.path.append('C:\Python27\Lib\site-packages\wx-3.0-msw\wx')
+    print sys.path
+    import wxversion
+    wxversion.select("3.0")
+    import wx
 except ImportError:
     raise ImportError,"The wxPython module is required to run this program"
 
 try:
+
     from wx import glcanvas
     haveGLCanvas = True
 except ImportError:
@@ -216,35 +222,46 @@ class simpleapp_wx(wx.Frame):
     def __init__(self,parent,id,title):
         wx.Frame.__init__(self,parent,id,title)
         self.parent = parent
+        self.SetBackgroundColour(wx.BLACK)
         self.initialize()
 
     def initialize(self):
-        sizer = wx.GridBagSizer()
 
-        button = wx.Button(self,-1,label="Next turn")
-        sizer.Add(button, (0,0))
-        self.Bind(wx.EVT_BUTTON, self.OnButtonClick, button)
+        sizer = wx.BoxSizer(wx.VERTICAL)
 
-        self.canvas = CubeCanvas(self)
-        self.canvas.SetMinSize((200, 200))
-        sizer.Add(self.canvas, (1,0))
-       
-        self.label = wx.StaticText(self,-1,label=u'Hello !')
+        #Add label
+        self.label = wx.StaticText(self,-1,label=u'Welcome')
         self.label.SetBackgroundColour(wx.BLUE)
         self.label.SetForegroundColour(wx.WHITE)
-        sizer.Add(self.label,(2,0))
-        
-        sizer.AddGrowableCol(0)
-        self.SetSizerAndFit(sizer)
+        sizer.Add(self.label, 0, 0, 2)
+
+        #Add canvas
+        self.canvas = CubeCanvas(self)
+        self.canvas.SetMinSize((500, 500))
+        sizer.Add(self.canvas, 1, wx.EXPAND | wx.ALL, 20)
+
+        #Add next turn button
+        button = wx.Button(self,-1,label="Next turn")
+        sizer.Add(button, 0, 0, 0)
+        self.Bind(wx.EVT_BUTTON, self.OnButtonClick, button)
+
+        #Add quit button
+        quitButton = wx.Button(self,-1,label="Quit")
+        sizer.Add(quitButton, 0, 0, 1)
+        self.Bind(wx.EVT_BUTTON, self.OnQuitButtonClick, quitButton)
+
+        #Bind sizer
+        sizer.SetSizeHints(self)
+        self.SetSizer(sizer)
         self.Show(True)
         self.battle = None
 
-        myDlg = MyDialog()
-        res = myDlg.ShowModal()
-        if res == wx.ID_OK:
-            self.p1Name = str(myDlg.entry.GetValue())
-
-        myDlg.Destroy()
+       # myDlg = MyDialog()
+       # res = myDlg.ShowModal()
+       # if res == wx.ID_OK:
+       #     self.p1Name = str(myDlg.entry.GetValue())
+       # myDlg.Destroy()
+        self.p1Name = "Test"
         
         self.label.SetLabel(self.p1Name+", click the button to start the game")
         p2Name = "Demon"
@@ -257,7 +274,6 @@ class simpleapp_wx(wx.Frame):
 
         self.battle = self.p1.startBattle(self.p2)
 
-
     def OnButtonClick(self,event):
         print('clicked!')
         if self.p1.holdsCards() and self.p2.holdsCards():
@@ -265,7 +281,9 @@ class simpleapp_wx(wx.Frame):
         else :
             self.label.SetLabel("Game Over")
 
-
+    def OnQuitButtonClick(self,event):
+        print('Quitting...')
+        raise SystemExit
 
     def OnPressEnter(self,event):
         self.label.SetLabel( self.entry.GetValue() + " (You pressed ENTER)" )
